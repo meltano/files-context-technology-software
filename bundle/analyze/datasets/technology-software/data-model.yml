@@ -1,0 +1,40 @@
+version: datasets/v0.3
+title: "Technology and software: data model"
+questions: What are the core entities of technology and software data, and at what grain should each be modelled?
+description: |
+  The entities most technology and software data reduces to, with the grain and key of each. Use it
+  to map raw source tables onto a consistent model. Names are suggestions; keep the organisation's
+  own terms where they already exist.
+
+  | Entity | Grain (one row per…) | Notes |
+  |---|---|---|
+  | `account` | customer organisation | The B2B customer. Has IDs in CRM, billing and the product: keep a mapping, since they rarely match one to one |
+  | `user` | person using the product | Belongs to one or more accounts or workspaces. Anonymous and identified IDs merge on sign-up |
+  | `workspace` (tenant) | product instance | The unit the product is organised around. Often what usage is counted against |
+  | `plan` / `price` | price version | Product, tier, billing interval, currency, unit price, usage tiers. Prices change: version them |
+  | `subscription` | subscription | Account, plan, quantity, status, start, current period, cancel and end dates, trial dates |
+  | `subscription_change` | change event | New, upgrade, downgrade, quantity change, cancellation, reactivation, with old and new recurring value. The source of MRR movements |
+  | `invoice` / `invoice_line` | invoice line | Amount, period covered, tax, discount, proration flag. Credit notes reverse lines |
+  | `payment` | payment attempt | Succeeded or failed, with retry (dunning) attempts |
+  | `usage_record` | metered unit per account per period | For usage-based pricing: quantity by meter, aggregated from product events |
+  | `event` | product event | User, workspace, event name, timestamp, properties. Very high volume |
+  | `opportunity` | sales opportunity | New business, expansion or renewal, with stage history, amount, close date and owner |
+  | `contract` | signed contract | Term, committed value, start and end dates, renewal date. Can differ from the billing subscription |
+  | `support_ticket` | ticket | Account, priority, category, created, first response and solved timestamps, satisfaction |
+
+  ## Relationships
+
+  - An **account** has one or more **subscriptions**, **workspaces** and **users**.
+  - A **subscription** has a history of **subscription changes**, is billed on **invoices** and
+    collected by **payments**.
+  - **Events** belong to a **user** and a **workspace**, and roll up to **usage records** for billing
+    and adoption.
+  - An **opportunity** closes into a **contract** and a **subscription**.
+
+  ## Status and history
+
+  Subscription status and value change constantly (`trialing` → `active` → `past_due` →
+  `cancelled`). Keep every change with its effective date, so recurring revenue can be rebuilt for any
+  day. Snapshot account attributes such as segment, owner and health score, which change over time.
+
+  #technology-software #organisation-context

@@ -1,0 +1,58 @@
+version: datasets/v0.3
+title: "Technology and software: industry overview"
+questions: What does a technology or software organisation's data look like, and where does it come from?
+description: |
+  Industry context for this workspace, for the people and AI assistants working in it. It has no
+  query: it is a briefing to read before modelling or analysing this organisation's data.
+
+  ## Segments
+
+  Technology and software covers organisations whose product is software, a digital service or the
+  services around them. The segments differ in which entities and metrics matter most:
+
+  - **B2B SaaS:** subscriptions sold to companies by seat, tier or usage. Recurring revenue, pipeline,
+    expansion, churn and product adoption by account drive the data.
+  - **Product-led growth (PLG) and freemium:** self-serve sign-ups that convert to paid. Activation,
+    free-to-paid conversion and usage drive the data, with sales assisting larger accounts.
+  - **Consumer apps and subscriptions:** app store or web subscriptions, often with trials. Installs,
+    active users, retention cohorts and in-app purchases drive the data.
+  - **Usage-based platforms and APIs:** infrastructure, data and developer tools billed on metered
+    usage (calls, compute, storage), often with commitments and credits.
+  - **Licensed and on-premises software:** perpetual or term licences plus support and maintenance
+    contracts, renewed annually.
+  - **IT services, consultancies and agencies:** projects, time and materials, utilisation and
+    billable hours.
+
+  ## Typical source systems
+
+  | System | Examples | What it holds |
+  |---|---|---|
+  | Billing and subscriptions | Stripe Billing, Chargebee, Recurly, Zuora, Paddle | Customers, subscriptions, plans, invoices, payments, credit notes |
+  | App stores | App Store Connect, Google Play Console, RevenueCat | Installs, subscriptions, renewals, refunds, store proceeds |
+  | CRM | Salesforce, HubSpot | Accounts, contacts, leads, opportunities, contracts |
+  | Product analytics | Amplitude, Mixpanel, PostHog, Heap, Segment | Users, events, sessions, feature usage |
+  | Application database | PostgreSQL, MySQL, MongoDB (the product's own) | Workspaces or tenants, users, plans, usage records |
+  | Customer support | Zendesk, Intercom, Freshdesk | Tickets, conversations, satisfaction ratings |
+  | Customer success | Gainsight, Vitally, ChurnZero | Health scores, renewals, success plans |
+  | Accounting / ERP | Xero, QuickBooks, NetSuite, Sage Intacct | General ledger, invoices, deferred revenue |
+  | Marketing | HubSpot, Marketo, Google Ads, LinkedIn Ads | Campaigns, form fills, spend, attribution |
+  | Engineering and operations | GitHub, Jira, Linear, PagerDuty, Datadog | Issues, releases, incidents, uptime |
+  | Professional services | Harvest, Kantata, Toggl | Time entries, projects, billable rates |
+
+  ## What makes the data different
+
+  - **Revenue is a state, not an event.** Recurring revenue is the value of subscriptions active on
+    a date. It has to be rebuilt from the history of subscription changes, not summed from invoices.
+  - **Invoices are not revenue.** An annual plan is invoiced up front and recognised monthly; billing
+    data and finance's recognised revenue differ by design.
+  - **Accounts, users and tenants differ.** Billing knows the paying customer, CRM the account,
+    product analytics the user, and the application database the workspace. Joining them is often
+    the hardest modelling problem.
+  - **Event volume is large.** Product analytics produces far more rows than any other source;
+    model it incrementally and aggregate early.
+  - **Definitions are contested.** ARR, churn and "active user" each have several legitimate
+    definitions. Write down the chosen one.
+
+  Related datasets: *data model*, *metrics*, *modelling it in dbt*, *handling the data*.
+
+  #technology-software #organisation-context

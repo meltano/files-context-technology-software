@@ -1,0 +1,67 @@
+version: datasets/v0.3
+title: "Technology and software: modelling it in dbt"
+questions: How should raw technology and software data be modelled in dbt so that it reconciles?
+description: |
+  Conventions for building dbt models on raw technology and software data. They apply on top of the
+  workspace's usual dbt layout: staging, then intermediate, then marts.
+
+  ## Recurring revenue
+
+  - **Build MRR from subscription history, not invoices.** Turn subscription items and their changes
+    into effective-dated intervals (`valid_from`, `valid_to`, `mrr`), then spread them onto a daily
+    or month-end spine: `fct_mrr_daily` at account (or subscription) per day.
+  - **Normalise the interval.** Annual ÷ 12, quarterly ÷ 3, weekly × 52 ÷ 12. Apply recurring
+    discounts and coupons; exclude one-off charges, usage overage (or report it separately), tax and
+    prorations.
+  - **Derive movements from consecutive periods.** Compare each account's MRR with the previous
+    period: zero to positive is new (or reactivation if it had MRR before), up is expansion, down is
+    contraction, positive to zero is churn. Classify at account level, so a plan swap is not a churn
+    plus a new.
+  - **Decide the churn date.** Cancellation request, end of the paid period or failed dunning: pick one
+    and document it. Most use the date MRR actually stops.
+  - Billing tools (Stripe, Chargebee) often export subscription state, not history. Capture it with
+    **dbt snapshots** or the source's event stream if the change log is missing.
+
+  ## Money
+
+  - Stripe and most billing APIs give integers in minor units: convert in staging and name the
+    column for its unit. Keep the currency beside every amount; convert with a dated rate table.
+  - Keep billing amounts (invoiced, collected) separate from finance's recognised revenue. Reconcile
+    them; do not replace one with the other.
+
+  ## Identity
+
+  - Build an **account mapping** in an intermediate model that links CRM account, billing customer
+    and product workspace IDs, with the match method. Unmatched rows are a data quality report, not
+    something to drop.
+  - Exclude internal, test and partner accounts with a documented flag.
+
+  ## Product events
+
+  - Load events incrementally on the event timestamp with a look-back window for late arrivals, and
+    deduplicate on the event ID.
+  - Aggregate early: `fct_user_activity_daily` and `fct_account_usage_daily` serve most dashboards
+    without scanning raw events.
+  - Merge anonymous and identified user IDs once, in an intermediate model, using the identify calls.
+
+  ## Dates
+
+  Store timestamps in UTC. Use month-end values for MRR reporting, and keep billing period start and
+  end dates on invoice lines.
+
+  ## Tests
+
+  - **Roll-forward:** opening MRR + new + expansion − contraction − churn + reactivation = closing
+    MRR, for every period.
+  - **Source agreement:** current MRR agrees with the billing tool's MRR report, within a known list
+    of exclusions.
+  - No account has overlapping intervals for the same subscription item.
+  - `unique` and `not_null` on account, subscription and invoice keys; **accepted values** on
+    subscription status and movement type; **freshness** on billing and event sources.
+
+  ## Naming
+
+  Name facts for their grain: `fct_mrr_daily`, `fct_mrr_movements`, `fct_invoice_lines`,
+  `fct_account_usage_daily`, `dim_accounts`, `dim_plans`.
+
+  #technology-software #organisation-context

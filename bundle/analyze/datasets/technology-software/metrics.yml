@@ -1,0 +1,61 @@
+version: datasets/v0.3
+title: "Technology and software: key metrics"
+questions: Which metrics does a technology or software organisation run on, and how is each calculated?
+description: |
+  Standard definitions of the metrics technology and software organisations report. Confirm each
+  one with the finance or revenue operations team before building it: organisations differ on
+  whether trials, one-off fees, usage and discounts count, and on the date a change takes effect.
+
+  ## Recurring revenue
+
+  | Metric | Definition |
+  |---|---|
+  | Monthly recurring revenue (MRR) | Normalised monthly value of active subscriptions on a date, after recurring discounts, excluding one-off fees and tax. An annual plan counts as one twelfth |
+  | Annual recurring revenue (ARR) | MRR × 12, or the annualised value of contracted recurring revenue. Say which |
+  | MRR movements | Change in MRR split into new, expansion, contraction, churn and reactivation. Opening MRR + movements = closing MRR |
+  | Average revenue per account (ARPA) | MRR ÷ paying accounts |
+  | Bookings | Value of contracts signed in the period. Annual contract value (ACV) is the first-year or average annual value |
+  | Recognised revenue | Revenue earned in the period under the accounting standard (IFRS 15 or ASC 606). Comes from finance, not billing |
+
+  ## Retention
+
+  | Metric | Definition |
+  |---|---|
+  | Net revenue retention (NRR) | Recurring revenue now from accounts that were customers 12 months ago ÷ their recurring revenue then. Includes expansion |
+  | Gross revenue retention (GRR) | As NRR but excluding expansion, so it cannot exceed 100% |
+  | Logo (customer) churn rate | Customers lost in the period ÷ customers at the start |
+  | Revenue churn rate | Churned and contraction MRR in the period ÷ MRR at the start |
+
+  ## Growth efficiency
+
+  | Metric | Definition |
+  |---|---|
+  | Customer acquisition cost (CAC) | Sales and marketing cost ÷ new customers in the period |
+  | CAC payback (months) | CAC ÷ (new-customer ARPA × gross margin) |
+  | Customer lifetime value (LTV) | ARPA × gross margin ÷ revenue churn rate. LTV:CAC compares the two |
+  | Magic number | Increase in quarterly recurring revenue × 4 ÷ previous quarter's sales and marketing spend |
+  | Rule of 40 | Revenue growth rate + profit margin (often EBITDA or free cash flow margin) |
+  | Gross margin | (Revenue − cost of revenue: hosting, support, third-party services) ÷ revenue |
+
+  ## Pipeline
+
+  | Metric | Definition |
+  |---|---|
+  | Pipeline coverage | Open pipeline value due to close in the period ÷ target |
+  | Win rate | Won opportunities ÷ closed (won plus lost) opportunities, by count or value |
+  | Sales cycle length | Days from opportunity creation to close, for won deals |
+  | Free-to-paid (trial) conversion | Accounts converting to paid within a window ÷ accounts that started a trial or free plan |
+
+  ## Product and service
+
+  | Metric | Definition |
+  |---|---|
+  | Daily / monthly active users (DAU / MAU) | Distinct users with a qualifying event in the day or 28–30 days. Define the qualifying event |
+  | Stickiness | DAU ÷ MAU |
+  | Activation rate | New users or accounts reaching a defined activation milestone within a window ÷ new sign-ups |
+  | Feature adoption | Active accounts using a feature ÷ active accounts |
+  | Uptime (availability) | Minutes the service met its availability definition ÷ minutes in the period |
+  | First response and resolution time | Median time from ticket creation to first reply and to solve |
+  | Utilisation (services) | Billable hours ÷ available hours |
+
+  #technology-software #organisation-context

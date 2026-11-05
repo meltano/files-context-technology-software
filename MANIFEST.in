@@ -1,0 +1,2 @@
+# bundle/ is copied verbatim into customer repos: include every file under it
+recursive-include bundle *

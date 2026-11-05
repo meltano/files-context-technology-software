@@ -1,0 +1,49 @@
+version: datasets/v0.3
+title: "Technology and software: handling the data"
+questions: What care does technology and software data need in the warehouse?
+description: |
+  Technology and software organisations hold data about their own customers and users, and often
+  data their customers put into the product. These are general practices for a warehouse holding
+  it. They are not legal or compliance advice: the organisation's legal, security or data
+  protection team decides what applies to it.
+
+  ## Classify the data
+
+  | Class | Examples | Handling |
+  |---|---|---|
+  | Customer content | Files, messages, records and other data customers store in the product | **Keep it out of the warehouse** unless the contract allows it. The organisation is usually a processor for it, bound by the customer's instructions |
+  | Secrets and credentials | API keys, tokens, password hashes, OAuth secrets | **Never load them.** Exclude the columns at extraction, not in a later model |
+  | Card data | Full card number, CVV | Never load it. Billing providers tokenise it: keep the token and at most the last four digits (PCI DSS) |
+  | Personal data | User names, emails, IP addresses, device IDs, user-level event streams | Restrict access, pseudonymise in shared marts, mask in non-production |
+  | Commercial data | Contract values, discounts, pipeline, salaries in services data | Restrict to finance, sales leadership and the roles that need it |
+
+  ## Practices
+
+  - **Least privilege.** Separate raw, staging and mart schemas, and grant raw schemas only to the
+    pipelines and the people who maintain them.
+  - **Select columns at extraction.** Replicating the application database copies everything,
+    including tokens and customer content. Choose the tables and columns the warehouse needs.
+  - **Pseudonymise users.** Most product analysis needs a stable user ID, not a name or email.
+  - **No production data in development** without masking.
+  - **Retention.** Keep raw event data for a defined period and aggregates longer. Honour deletion
+    when a customer leaves, as the contract requires.
+  - **Data subject requests.** Under GDPR and UK GDPR a user can ask for their data or for its
+    erasure, so know where each person's data lives, including events and support conversations.
+  - **Sub-processors.** The warehouse and every tool it feeds may be listed as sub-processors in the
+    organisation's data processing agreements; check before adding a new destination.
+
+  ## Rules and frameworks to be aware of
+
+  Which apply depends on the organisation's country, customers and activities. Common ones:
+
+  - **UK and EU:** UK GDPR and GDPR (including the controller and processor roles), PECR and the
+    ePrivacy Directive (cookies and product analytics consent), the EU Data Act, NIS2 for some
+    digital service providers.
+  - **US:** state privacy laws such as the CCPA/CPRA; HIPAA when handling health data for covered
+    entities; COPPA for children's services.
+  - **International transfers:** standard contractual clauses, the UK International Data Transfer
+    Agreement, the EU–US Data Privacy Framework.
+  - **Assurance frameworks customers ask for:** SOC 2, ISO/IEC 27001, Cyber Essentials (UK).
+  - **Card payments:** PCI DSS.
+
+  #technology-software #organisation-context
