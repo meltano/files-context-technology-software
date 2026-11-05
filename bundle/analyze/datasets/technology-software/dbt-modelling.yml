@@ -46,7 +46,8 @@ description: |
 
   ## Dates
 
-  Store timestamps in UTC. Use month-end values for MRR reporting, and keep billing period start and
+  Store timestamps in UTC (GMT+00:00, no daylight saving), and say which timezone month-end is
+  taken in (UK: GMT in winter, BST = GMT+01:00 in summer). Use month-end values for MRR reporting, and keep billing period start and
   end dates on invoice lines.
 
   ## Tests
